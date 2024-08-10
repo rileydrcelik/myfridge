@@ -6,6 +6,7 @@ import { Box, Typography, Modal, Stack, TextField, Button, List, ListItem } from
 import { collection, getDocs, query, getDoc, setDoc, doc, deleteDoc } from 'firebase/firestore'
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import theme from './theme.js';
+import RecipeSuggester from './components/recipeSuggester';
 
 
 export default function Home() {
@@ -15,6 +16,7 @@ export default function Home() {
   const [itemName, setItemName] = useState('')
   const [qty, setQty] = useState('')
   const [searchName, searchQuery] = useState('')
+  const [modalOpen, setModalOpen] = useState(false);
 
   //creating function to update inventory, uses async so i does fuck it up i think...
   const updateInventory = async() => {
@@ -90,6 +92,9 @@ export default function Home() {
   //modal helper functions
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
+  //bottom ones are for generate recipe
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
   
   return (
   <ThemeProvider theme={theme}>
@@ -221,6 +226,34 @@ export default function Home() {
                     
                     Add New Item
                 </Button>
+                <Button
+                  variant="outlined"
+                  sx={{textTransform: 'none',  }}
+                  onClick={()=>{
+                    openModal()
+                  }}
+                >
+                    Generate Recipe
+                </Button>
+                <Modal open={modalOpen} onClose={closeModal}>
+                  <Box
+                    position="absolute"
+                    top="16%"
+                    left="30%"
+                    width={600}
+                    bgcolor="white"
+                    border="2px solid black"
+                    borderRadius="10px"
+                    boxShadow={24}
+                    p={4}
+                    display="flex"
+                    flexDirection="column"
+                    gap={3}
+                  >
+                    <RecipeSuggester />
+                  </Box>
+                </Modal>
+                
           </Box>
         </Box>
         <Stack
